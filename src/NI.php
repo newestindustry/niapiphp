@@ -91,8 +91,18 @@ class NI
             }    
         }
         
-        
         return $this->token;
+    }
+    
+    /**
+     * logout function.
+     * 
+     * @access public
+     * @return void
+     */
+    public function logout()
+    {
+        $this->getApi()->logout();
     }
     
     /**

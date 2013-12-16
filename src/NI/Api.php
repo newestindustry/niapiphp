@@ -138,9 +138,21 @@ class Api
         } else {
             return $this->me;
         }
-        
     }
     
+    
+    /**
+     * logout function.
+     * 
+     * @access public
+     * @return void
+     */
+    public function logout()
+    {
+        $a = $this->delete("/oauth/token/");
+        unset($_SESSION[$this->getNI()->namespace]);
+        $this->oauth_token = null;
+    }
     
     /**
      * readConfig function.
