@@ -213,7 +213,7 @@ class Api
             $_SESSION[$this->getNI()->namespace]['token'] = $token->data;
             $this->oauth_token = $token->data->access_token;
         } else {
-            
+            /* throw new \NI\Oauth\Exception($_GET['error_description']); */
         }
 
         return $token;
