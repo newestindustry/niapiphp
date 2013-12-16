@@ -72,14 +72,7 @@ class NI
      */
     public function readApiConfig($config = array())
     {
-        $vars = array("base_url", "client_id", "client_secret", "redirect_uri", "scope");
-        
-        foreach($vars as $var) {
-            if(isset($config[$var])) {
-                $this->getApi()->{$var} = $config[$var];    
-            }
-        }
-        
+        $this->api->readConfig($config);        
     }
     
     /**

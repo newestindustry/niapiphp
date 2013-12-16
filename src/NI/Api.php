@@ -67,17 +67,28 @@ class Api
      */
     public $redirect_uri = "";
 
+
+    /**
+     * me
+     * 
+     * (default value: false)
+     * 
+     * @var mixed
+     * @access private
+     */
+    private $me = false;
+
     /**
      * oauth_token
      * 
-     * @var mixed
+     * @var string
      * @access private
      */
     private $oauth_token;
     /**
      * api_key
      * 
-     * @var mixed
+     * @var string
      * @access private
      */
     private $api_key;
@@ -96,7 +107,7 @@ class Api
      * __construct function.
      * 
      * @access public
-     * @param bool $ni (default: false)
+     * @param mixed $ni (default: false)
      * @return void
      */
     public function __construct($ni = false)
@@ -109,6 +120,29 @@ class Api
     }
     
     /**
+     * getProfile function.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getProfile()
+    {
+        if(!$this->me) {
+            $me = $this->get("/me/");
+            if($this->oauth_token && $me->isSuccess()) {
+                $this->me = $me->data->me;
+                return $this->me;
+            } else {
+                return false;
+            }    
+        } else {
+            return $this->me;
+        }
+        
+    }
+    
+    
+    /**
      * readConfig function.
      * 
      * @access public
@@ -117,7 +151,7 @@ class Api
      */
     public function readConfig($config = array())
     {
-        $vars = array("base_url", "client_id", "client_secret", "redirect_uri", "scope");
+        $vars = array("api_key", "base_url", "client_id", "client_secret", "redirect_uri", "scope");
         
         foreach($vars as $var) {
             if(isset($config[$var])) {

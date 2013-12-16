@@ -25,3 +25,18 @@ And start the login process by firing the login() function.
     $ni->login();
 
 Make sure you do this after starting your session. The session namespace used is "niapi".
+
+After this, the oauth token is stored in session and is now automatically used in any future calls. If you want to get the logged in users profile, you can use the predefined profile call or use the API calls directly.
+    
+    $profile = $ni->getApi()->get("/me/");
+    
+This returns the \NI\Api\Response object. The actual user profile data would be in
+
+    $profile->data->me;
+    
+But as a helper getProfile is available:
+
+	$profile = $ni->getApi()->getProfile();
+	
+	
+And is either false, or the users object.

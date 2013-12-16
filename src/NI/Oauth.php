@@ -13,5 +13,28 @@ namespace NI;
  */
 class Oauth
 {
-
+    
+    /**
+     * api
+     * 
+     * @var mixed
+     * @access private
+     */
+    private $api;
+    
+    /**
+     * __construct function.
+     * 
+     * @access public
+     * @param mixed $api
+     * @return void
+     */
+    public function __construct($api)
+    {
+        $this->api = $api;
+    }
+    
+    
+    
+    
 }
