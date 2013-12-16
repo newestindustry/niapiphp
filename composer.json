@@ -1,7 +1,7 @@
 {
     "name": "newestindustry/niapiphp",
     "descript": "Newest Industry API PHP SDK",
-    "license": "MIT",
+    "license": "GPL-2.0",
     "authors": [
         {
             "name": "Martijn van Maasakkers",
