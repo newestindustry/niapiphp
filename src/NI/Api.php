@@ -180,6 +180,11 @@ class Api
      */
     public function redirectToLogin()
     {
+        if($this->client_id == "" || $this->redirect_uri == "") {
+            throw new \NI\Oauth\Exception("No client id or redirect uri given");
+        }
+    
+    
         $params = array(
             "response_type" => "code",
             "client_id" => $this->client_id,
@@ -199,6 +204,10 @@ class Api
      */
     public function getToken()
     {
+        if($this->client_id == "" || $this->client_secret == "") {
+            throw new \NI\Oauth\Exception("No client id or client secret");
+        }
+        
         $params = array(
             "grant_type" => "authorization_code",
             "client_id" => $this->client_id,
