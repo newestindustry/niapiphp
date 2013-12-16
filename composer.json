@@ -1,0 +1,23 @@
+{
+    "name": "newestindustry/niapiphp",
+    "descript": "Newest Industry API PHP SDK",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martijn van Maasakkers",
+            "email": "martijn@vanmaasakkers.net",
+            "homepage": "https://twitter.com/mvmaasakkers",
+            "role": "Developer"
+        }
+    ],
+    "keywords": ["rest", "oauth2", "webservice"],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "NI": "src"
+        }
+    }
+}
+    
