@@ -16,7 +16,7 @@ After that you can initiate the NI class by giving the client id, client secret 
     $config = array(
                     "client_id" => "clientid", 
                     "client_secret" => "clientsecret",
-                    "redirect_uri" => "http://niapiphp.local/test.php"
+                    "redirect_uri" => "http://redirect/uri"
                 );
     $ni = new \NI($config);
     
