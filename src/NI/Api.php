@@ -14,9 +14,9 @@ namespace NI;
 class Api
 {
     /**
-     * ni
+     * ni object
      * 
-     * @var mixed
+     * @var \NI
      * @access private
      */
     private $ni;
@@ -103,6 +103,26 @@ class Api
     {
         if(get_class($ni) === "NI") {
             $this->ni = $ni;
+        } elseif(is_array($ni)) {
+            $this->readConfig($ni);
+        }
+    }
+    
+    /**
+     * readConfig function.
+     * 
+     * @access public
+     * @param array $config (default: array())
+     * @return void
+     */
+    public function readConfig($config = array())
+    {
+        $vars = array("base_url", "client_id", "client_secret", "redirect_uri", "scope");
+        
+        foreach($vars as $var) {
+            if(isset($config[$var])) {
+                $this->{$var} = $config[$var];    
+            }
         }
     }
     
@@ -129,7 +149,7 @@ class Api
      * getToken function.
      * 
      * @access public
-     * @return void
+     * @return object
      */
     public function getToken()
     {
@@ -157,8 +177,8 @@ class Api
      * get function.
      * 
      * @access public
-     * @param mixed $uri
-     * @return void
+     * @param string $uri
+     * @return \NI\Api\Response
      */
     public function get($uri)
     {
@@ -169,9 +189,9 @@ class Api
      * post function.
      * 
      * @access public
-     * @param mixed $uri
-     * @param mixed $data
-     * @return void
+     * @param string $uri
+     * @param array $data
+     * @return \NI\Api\Response
      */
     public function post($uri, $data)
     {
@@ -182,9 +202,9 @@ class Api
      * put function.
      * 
      * @access public
-     * @param mixed $uri
-     * @param mixed $data
-     * @return void
+     * @param string $uri
+     * @param array $data
+     * @return \NI\Api\Response
      */
     public function put($uri, $data)
     {
@@ -195,8 +215,8 @@ class Api
      * delete function.
      * 
      * @access public
-     * @param mixed $uri
-     * @return void
+     * @param string $uri
+     * @return \NI\Api\Response
      */
     public function delete($uri)
     {
@@ -207,10 +227,10 @@ class Api
      * call function.
      * 
      * @access private
-     * @param mixed $resource
-     * @param mixed $method
+     * @param string $resource
+     * @param string $method
      * @param array $data (default: array())
-     * @return void
+     * @return \NI\Api\Response
      */
     private function call($resource, $method, $data = array())
     {
@@ -276,7 +296,7 @@ class Api
      * getNI function.
      * 
      * @access public
-     * @return void
+     * @return \NI
      */
     public function getNI()
     {
@@ -287,7 +307,7 @@ class Api
      * setToken function.
      * 
      * @access public
-     * @param mixed $token
+     * @param string $token
      * @return void
      */
     public function setToken($token)
