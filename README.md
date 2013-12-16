@@ -40,3 +40,51 @@ But as a helper getProfile is available:
 	
 	
 And is either false, or the users object.
+
+## Config options
+
+
+<table>
+	<tr>
+    	<th>Key</th>
+	    <th>Description</th>
+	    <th>Default value</th>
+		<th>Possible value(s)</th>
+    </tr>
+	<tr>
+            <td>base_url</td>
+            <td>The API endpoint URL</td>
+            <td>"https://api.newestindustry.nl"</td>
+            <td>A valid url</td>
+        </tr>
+        <tr>
+            <td>client_id</td>
+            <td>Client ID for oauth</td>
+            <td>false</td>
+            <td>A valid Client ID</td>
+        </tr>
+        <tr>
+            <td>client_secret</td>
+            <td>Client Secret for oauth</td>
+            <td>false</td>
+            <td>A valid Client Secret</td>
+        </tr>
+        <tr>
+            <td>redirect_uri</td>
+            <td>The URL to redirect to after logging in</td>
+            <td>false</td>
+            <td>A valid redirect uri</td>
+        </tr>
+        <tr>
+            <td>scope</td>
+            <td>The data scope</td>
+            <td>"default"</td>
+            <td>"default"</td>
+        </tr>
+        <tr>
+            <td>api_key</td>
+            <td>The API Key</td>
+            <td>false</td>
+            <td>A valid api key</td>
+        </tr>
+</table>
