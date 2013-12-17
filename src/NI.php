@@ -79,13 +79,18 @@ class NI
      * login function.
      * 
      * @access public
+     * @param bool $register (default: false)
      * @return void
      */
-    public function login()
+    public function login($register=false)
     {
         if(!isset($_SESSION[$this->namespace]['token'])) {
             if(!$this->profile && !isset($_GET['code']) && !isset($_GET['error'])) {
-                $this->getApi()->redirectToLogin();
+                if ($register == true) {
+                    $this->getApi()->redirectToRegister();
+                } else {
+                    $this->getApi()->redirectToLogin();
+                }
             } elseif(isset($_GET['error'])) {
                 throw new \NI\Oauth\Exception($_GET['error_description']);
             } elseif(isset($_GET['code'])) {

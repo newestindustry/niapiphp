@@ -197,6 +197,30 @@ class Api
     }
     
     /**
+     * redirectToRegister function.
+     * 
+     * @access public
+     * @return void
+     */
+    public function redirectToRegister()
+    {
+        if($this->client_id == "" || $this->redirect_uri == "") {
+            throw new \NI\Oauth\Exception("No client id or redirect uri given");
+        }
+    
+    
+        $params = array(
+            "response_type" => "code",
+            "client_id" => $this->client_id,
+            "redirect_uri" => $this->redirect_uri,
+            "scope" => $this->scope
+        );
+
+        header("Location: ".$this->base_url."/oauth/register/?".http_build_query($params));
+        die();
+    }
+    
+    /**
      * getToken function.
      * 
      * @access public

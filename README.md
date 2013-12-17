@@ -26,6 +26,12 @@ And start the login process by firing the login() function.
 
 Make sure you do this after starting your session. The session namespace used is "niapi".
 
+If you want to redirect the user to the register form instead of the login form set the register flag to true.
+
+    $ni->login(true);
+
+This will take the user directly to the register form. After registration the user will be redirected to the login form and everything will work the same.
+
 After this, the oauth token is stored in session and is now automatically used in any future calls. If you want to get the logged in users profile, you can use the predefined profile call or use the API calls directly.
     
     $profile = $ni->getApi()->get("/me/");
