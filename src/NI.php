@@ -13,12 +13,25 @@
 class NI 
 {
     /**
-     * api
+     * The static API class pointer
      * 
-     * @var mixed
-     * @access private
+     * @var NI\Api
+     * @access public
+     * @static
      */
-    private $api;
+    public static $api;
+
+
+    /**
+     * token
+     * 
+     * (default value: false)
+     * 
+     * @var bool
+     * @access public
+     * @static
+     */
+    public static $token = false;
     /**
      * profile
      * 
@@ -26,15 +39,6 @@ class NI
      * @access private
      */
     private $profile;
-    /**
-     * token
-     * 
-     * (default value: false)
-     * 
-     * @var bool
-     * @access private
-     */
-    private $token = false;
     
     /**
      * namespace
@@ -44,7 +48,7 @@ class NI
      * @var string
      * @access public
      */
-    public $namespace = "niapi";
+    public static $namespace = "niapi";
 
     /**
      * __construct function.
@@ -55,11 +59,14 @@ class NI
      */
     public function __construct($config = array())
     {
-        $this->api = new \NI\Api($this);
+        // Make sure to start a session
+        if (session_status() !== PHP_SESSION_ACTIVE) {session_start();}
+    
+        self::setApi(new \NI\Api($this));
         $this->readApiConfig($config);
         
-        if(isset($_SESSION[$this->namespace]['token']) && $_SESSION[$this->namespace]['token']->access_token) {
-            $this->setToken($_SESSION[$this->namespace]['token']->access_token);
+        if(isset($_SESSION[self::$namespace]['token']) && $_SESSION[self::$namespace]['token']->access_token) {
+            $this->setToken($_SESSION[self::$namespace]['token']->access_token);
         }
     }
     
@@ -72,7 +79,7 @@ class NI
      */
     public function readApiConfig($config = array())
     {
-        $this->api->readConfig($config);        
+        $this->getApi()->readConfig($config);        
     }
     
     /**
@@ -82,9 +89,9 @@ class NI
      * @param bool $register (default: false)
      * @return void
      */
-    public function login($register=false)
+    public function login($register = false)
     {
-        if(!isset($_SESSION[$this->namespace]['token'])) {
+        if(!isset($_SESSION[self::$namespace]['token'])) {
             if(!$this->profile && !isset($_GET['code']) && !isset($_GET['error'])) {
                 if ($register == true) {
                     $this->getApi()->redirectToRegister();
@@ -94,11 +101,11 @@ class NI
             } elseif(isset($_GET['error'])) {
                 throw new \NI\Oauth\Exception($_GET['error_description']);
             } elseif(isset($_GET['code'])) {
-                $this->token = $this->getApi()->getToken();
+                self::$token = $this->getApi()->getToken();
             }    
         }
         
-        return $this->token;
+        return self::$token;
     }
     
     /**
@@ -113,37 +120,50 @@ class NI
     }
     
     /**
-     * getApi function.
-     * 
-     * @access public
-     * @return void
-     */
-    public function getApi()
-    {
-        return $this->api;
-    }
-    
-    /**
      * getNamespace function.
      * 
      * @access public
-     * @return void
+     * @return string
      */
     public function getNamespace()
     {
-        return $this->namespace;
+        return self::$namespace;
     }
     
     /**
      * setToken function.
      * 
      * @access public
-     * @param mixed $token
+     * @param string $token
      * @return void
      */
     public function setToken($token)
     {
         $this->getApi()->setToken($token);
     }
+
+    /**
+     * getApi function.
+     * 
+     * @access public
+     * @static
+     * @return \NI\Api
+     */
+    public static function getApi()
+    {
+        return self::$api;
+    }
     
+    /**
+     * setApi function.
+     * 
+     * @access public
+     * @static
+     * @param \NI\Api $api
+     * @return void
+     */
+    public static function setApi($api)
+    {
+        self::$api = $api;
+    }    
 }

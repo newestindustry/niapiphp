@@ -67,7 +67,6 @@ class Api
      */
     public $redirect_uri = "";
 
-
     /**
      * me
      * 
@@ -78,13 +77,6 @@ class Api
      */
     private $me = false;
 
-    /**
-     * oauth_token
-     * 
-     * @var string
-     * @access private
-     */
-    private $oauth_token;
     /**
      * api_key
      * 
@@ -99,9 +91,9 @@ class Api
      * (default value: true)
      * 
      * @var bool
-     * @access private
+     * @access public
      */
-    private $format = true;
+    public $format = true;
     
     /**
      * __construct function.
@@ -129,7 +121,7 @@ class Api
     {
         if(!$this->me) {
             $me = $this->get("/me/");
-            if($this->oauth_token && $me->isSuccess()) {
+            if(\NI::$token && $me->isSuccess()) {
                 $this->me = $me->data->me;
                 return $this->me;
             } else {
@@ -150,8 +142,8 @@ class Api
     public function logout()
     {
         $a = $this->delete("/oauth/token/");
-        unset($_SESSION[$this->getNI()->namespace]);
-        $this->oauth_token = null;
+        unset($_SESSION[\NI::$namespace]);
+        \NI::$token = null;
     }
     
     /**
@@ -243,8 +235,8 @@ class Api
         $token = $this->post("/oauth/token/", $params);
         
         if($this->ni && $token->isSuccess()) {
-            $_SESSION[$this->getNI()->namespace]['token'] = $token->data;
-            $this->oauth_token = $token->data->access_token;
+            $_SESSION[\NI::$namespace]['token'] = $token->data;
+            \NI::$token = $token->data->access_token;
         } else {
             /* throw new \NI\Oauth\Exception($_GET['error_description']); */
         }
@@ -316,8 +308,8 @@ class Api
         $headers = array();
         $url = $this->base_url.$resource;
 
-        if($this->oauth_token) {
-                $headers[] = 'Authorization: oauth_token '.$this->oauth_token;
+        if(\NI::$token) {
+                $headers[] = 'Authorization: oauth_token '.\NI::$token;
         }
         
         if($this->api_key) {
@@ -391,7 +383,7 @@ class Api
      */
     public function setToken($token)
     {
-        $this->oauth_token = $token;
+        \NI::$token = $token;
     }
     
 }

@@ -1,4 +1,4 @@
-# Newest Industry API PHP SDK
+# Newest Industry API PHP SDK (Beta)
 
 This is the Newest Industry API PHP SDK.
 
