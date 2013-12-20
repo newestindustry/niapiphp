@@ -47,6 +47,17 @@ But as a helper getProfile is available:
 	
 And is either false, or the users object.
 
+## Sidebar
+
+To load the NI sidebar you can use the Sidebar components class:
+
+    $sidebar = \NI\Components\Sidebar();
+    
+This is directly useable in templates or code because of the lovely and magical __string function:
+
+    echo $sidebar;
+
+
 ## Config options
 
 

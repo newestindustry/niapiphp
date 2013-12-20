@@ -6,7 +6,7 @@
  * @package NIApiPHP
  */
  
-namespace NI;
+namespace NI\Components;
 
 /**
  * Sidebar class.
