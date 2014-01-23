@@ -88,12 +88,12 @@ class Api
     /**
      * format
      * 
-     * (default value: true)
+     * (default value: false)
      * 
      * @var bool
      * @access public
      */
-    public $format = true;
+    public $format = false;
     
     /**
      * __construct function.
@@ -348,8 +348,19 @@ class Api
         if($e === false) {
             throw new \NI\Api\Exception();
         }
-
+        
+        if(!curl_errno($ch))
+        {
+            $info = curl_getinfo($ch);
+            $content_type = $info['content_type'];
+        } else {
+        	$content_type = 'application/json; charset=utf-8';
+        }
         curl_close($ch);
+        
+        if ($content_type == 'application/json; charset=utf-8' || $content_type == 'application/json') {
+            $this->format = true;
+        }
 
         if($e && $this->format) {
             $e = json_decode($e);
@@ -357,6 +368,7 @@ class Api
         
         $response = new \NI\Api\Response();
         $response->status = $http_status;
+        $response->content_type = $content_type;
         $response->data = $e;
         
         return $response;
