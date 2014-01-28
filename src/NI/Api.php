@@ -328,12 +328,12 @@ class Api
                         
                 case "POST":
                         curl_setopt($ch, CURLOPT_POST, true);
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
                         break;
                         
                 case "PUT":
                         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
                         break;
                         
                 case "DELETE":
