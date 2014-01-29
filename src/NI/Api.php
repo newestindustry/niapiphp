@@ -24,12 +24,12 @@ class Api
     /**
      * base_url
      * 
-     * (default value: "https://api.newestindustry.nl")
+     * (default value: "https://api.mycollectiv.es")
      * 
      * @var string
      * @access public
      */
-    public $base_url = "https://api.newestindustry.nl";
+    public $base_url = "https://api.mycollectiv.es";
     /**
      * client_id
      * 
