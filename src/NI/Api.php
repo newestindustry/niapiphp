@@ -360,10 +360,12 @@ class Api
         
         if ($content_type == 'application/json; charset=utf-8' || $content_type == 'application/json') {
             $this->format = true;
+
         }
 
         if($e && $this->format) {
             $e = json_decode($e);
+            $this->format = false;
         }
         
         $response = new \NI\Api\Response();
