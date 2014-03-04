@@ -238,10 +238,11 @@ class Api
             $_SESSION[\NI::$namespace]['token'] = $token->data;
             \NI::$token = $token->data->access_token;
         } else {
+         	\NI::$token = null;
             /* throw new \NI\Oauth\Exception($_GET['error_description']); */
         }
 
-        return $token;
+        return \NI::$token;
     }
 
     /**
