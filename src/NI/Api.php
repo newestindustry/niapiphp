@@ -68,6 +68,16 @@ class Api
     public $redirect_uri = "";
 
     /**
+     * locale
+     * 
+     * (default value: "nl_NL")
+     * 
+     * @var string
+     * @access public
+     */
+    public $locale = "nl_NL";
+
+    /**
      * me
      * 
      * (default value: false)
@@ -155,7 +165,7 @@ class Api
      */
     public function readConfig($config = array())
     {
-        $vars = array("api_key", "base_url", "client_id", "client_secret", "redirect_uri", "scope");
+        $vars = array("api_key", "base_url", "client_id", "client_secret", "redirect_uri", "scope", "locale");
         
         foreach($vars as $var) {
             if(isset($config[$var])) {
@@ -181,7 +191,8 @@ class Api
             "response_type" => "code",
             "client_id" => $this->client_id,
             "redirect_uri" => $this->redirect_uri,
-            "scope" => $this->scope
+            "scope" => $this->scope,
+            "_locale" => $this->locale
         );
 
         header("Location: ".$this->base_url."/oauth/auth/?".http_build_query($params));
@@ -205,7 +216,8 @@ class Api
             "response_type" => "code",
             "client_id" => $this->client_id,
             "redirect_uri" => $this->redirect_uri,
-            "scope" => $this->scope
+            "scope" => $this->scope,
+            "_locale" => $this->locale
         );
 
         header("Location: ".$this->base_url."/oauth/register/?".http_build_query($params));
