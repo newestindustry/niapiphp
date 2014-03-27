@@ -30,6 +30,28 @@ class Api
      * @access public
      */
     public $base_url = "https://api.mycollectiv.es";
+    
+    /**
+     * auth_url
+     * 
+     * (default value: "https://auth.newestindustry.nl")
+     * 
+     * @var string
+     * @access public
+     */
+    public $auth_url = "https://api.mycollectiv.es";
+    
+    
+    /**
+     * prefix
+     * 
+     * (default value: "/oauth")
+     * 
+     * @var string
+     * @access public
+     */
+    public $prefix = "/oauth";
+    
     /**
      * client_id
      * 
@@ -151,7 +173,7 @@ class Api
      */
     public function logout()
     {
-        $a = $this->delete("/oauth/token/");
+        $a = $this->delete("/token/");
         unset($_SESSION[\NI::$namespace]);
         \NI::$token = null;
     }
@@ -165,7 +187,7 @@ class Api
      */
     public function readConfig($config = array())
     {
-        $vars = array("api_key", "base_url", "client_id", "client_secret", "redirect_uri", "scope", "locale");
+        $vars = array("api_key", "base_url", "auth_url", "prefix", "client_id", "client_secret", "redirect_uri", "scope", "locale");
         
         foreach($vars as $var) {
             if(isset($config[$var])) {
@@ -192,10 +214,10 @@ class Api
             "client_id" => $this->client_id,
             "redirect_uri" => $this->redirect_uri,
             "scope" => $this->scope,
-            "_locale" => $this->locale
+            "locale" => $this->locale
         );
 
-        header("Location: ".$this->base_url."/oauth/auth/?".http_build_query($params));
+        header("Location: ".$this->auth_url.$this->prefix."/auth?".http_build_query($params));
         die();
     }
     
@@ -220,7 +242,7 @@ class Api
             "_locale" => $this->locale
         );
 
-        header("Location: ".$this->base_url."/oauth/register/?".http_build_query($params));
+        header("Location: ".$this->auth_url.$this->prefix."/register/?".http_build_query($params));
         die();
     }
     
@@ -244,8 +266,8 @@ class Api
             "scope" => $this->scope
         );
         
-        $token = $this->post("/oauth/token/", $params);
-        
+        $token = $this->post("/token", $params, true);
+        echo "<pre>".print_r($token, true)."</pre>";
         if($this->ni && $token->isSuccess()) {
             $_SESSION[\NI::$namespace]['token'] = $token->data;
             \NI::$token = $token->data->access_token;
@@ -277,9 +299,9 @@ class Api
      * @param array $data
      * @return \NI\Api\Response
      */
-    public function post($uri, $data)
+    public function post($uri, $data, $auth = false)
     {
-        return $this->call($uri, "POST", $data);
+        return $this->call($uri, "POST", $data, $auth);
     }
     
     /**
@@ -316,10 +338,16 @@ class Api
      * @param array $data (default: array())
      * @return \NI\Api\Response
      */
-    private function call($resource, $method, $data = array())
+    private function call($resource, $method, $data = array(), $auth = false)
     {
         $headers = array();
-        $url = $this->base_url.$resource;
+        if($auth) {
+            $url = $this->auth_url.$this->prefix.$resource;
+        } else {
+            $url = $this->base_url.$resource;
+        }
+
+        
 
         if(\NI::$token) {
                 $headers[] = 'Authorization: oauth_token '.\NI::$token;
@@ -371,7 +399,8 @@ class Api
         }
         curl_close($ch);
         
-        if ($content_type == 'application/json; charset=utf-8' || $content_type == 'application/json') {
+        $jsonContentType = "application/json";
+        if(substr(strtolower($content_type), 0, strlen($jsonContentType)) === $jsonContentType) {
             $this->format = true;
 
         }
