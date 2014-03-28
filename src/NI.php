@@ -107,6 +107,17 @@ class NI
 
         return self::$token;
     }
+    
+    /**
+     * getLinkToSocialNetwork function.
+     * 
+     * @access public
+     * @param string $name (default: "")
+     * @return void
+     */
+    public function getLinkToSocialNetwork($name = "") {
+        return $this->getApi()->getLinkToSocialNetwork($name);
+    }
 
     /**
      * logout function.

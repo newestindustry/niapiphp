@@ -52,6 +52,7 @@ class Api
      */
     public $prefix = "/oauth";
     
+    
     /**
      * client_id
      * 
@@ -247,6 +248,35 @@ class Api
     }
     
     /**
+     * getLinkToSocialNetwork function.
+     * 
+     * @access public
+     * @param string $name (default: "")
+     * @return void
+     */
+    public function getLinkToSocialNetwork($name = "")
+    {
+        $supported = array("facebook", "google", "linkedin", "twitter");
+        if($name == "" || !in_array($name, $supported)) {
+            throw new \NI\Oauth\Exception("Social network ".$name." not supported");
+        }
+        
+        if($this->client_id == "" || $this->redirect_uri == "") {
+            throw new \NI\Oauth\Exception("No client id or redirect uri given");
+        }
+        
+        $params = array(
+            "response_type" => "code",
+            "client_id" => $this->client_id,
+            "redirect_uri" => $this->redirect_uri,
+            "scope" => $this->scope,
+            "locale" => $this->locale
+        );
+
+        return $this->auth_url.$this->prefix."/connect/".$name."?".http_build_query($params);
+    }
+    
+    /**
      * getToken function.
      * 
      * @access public
@@ -267,7 +297,7 @@ class Api
         );
         
         $token = $this->post("/token", $params, true);
-        echo "<pre>".print_r($token, true)."</pre>";
+
         if($this->ni && $token->isSuccess()) {
             $_SESSION[\NI::$namespace]['token'] = $token->data;
             \NI::$token = $token->data->access_token;
