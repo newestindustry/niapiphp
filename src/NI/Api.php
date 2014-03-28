@@ -174,7 +174,7 @@ class Api
      */
     public function logout()
     {
-        $a = $this->delete("/token/");
+        $a = $this->delete("/token/", true);
         unset($_SESSION[\NI::$namespace]);
         \NI::$token = null;
     }
@@ -354,9 +354,9 @@ class Api
      * @param string $uri
      * @return \NI\Api\Response
      */
-    public function delete($uri)
+    public function delete($uri, $auth = false)
     {
-        return $this->call($uri, "DELETE");
+        return $this->call($uri, "DELETE", array(), $auth);
     }
     
     /**
