@@ -71,7 +71,7 @@ This is directly useable in templates or code because of the lovely and magical 
 	<tr>
             <td>base_url</td>
             <td>The API endpoint URL</td>
-            <td>"https://api.newestindustry.nl"</td>
+            <td>"https://api.mycollectiv.es"</td>
             <td>A valid url</td>
         </tr>
         <tr>
