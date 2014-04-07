@@ -240,7 +240,7 @@ class Api
             "client_id" => $this->client_id,
             "redirect_uri" => $this->redirect_uri,
             "scope" => $this->scope,
-            "_locale" => $this->locale
+            "locale" => $this->locale
         );
 
         header("Location: ".$this->auth_url.$this->prefix."/register/?".http_build_query($params));
