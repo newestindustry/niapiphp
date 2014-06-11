@@ -389,7 +389,7 @@ class Api
         
         $ch = curl_init($url);
         
-        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); 
@@ -415,7 +415,7 @@ class Api
                         break;
         }
                         
-        $e = curl_exec($ch);
+        $response = curl_exec($ch);
         $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         $this->status = $http_status;
@@ -430,17 +430,26 @@ class Api
         } else {
         	$content_type = 'application/json; charset=utf-8';
         }
+        
+        $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($response, 0, $header_size);
+        $e = substr($response, $header_size);
+        $contentDisposition = preg_match('/Content-Disposition: .*filename=[\'\"]([^\'\"]+)/', $header, $matches);
+        
         curl_close($ch);
         
         $jsonContentType = "application/json";
         if(substr(strtolower($content_type), 0, strlen($jsonContentType)) === $jsonContentType) {
             $this->format = true;
-
         }
 
         if($e && $this->format) {
             $e = json_decode($e);
             $this->format = false;
+        }
+        
+        if ($contentDisposition && isset($matches[1])) {
+            header('Content-Disposition: attachment; filename="'.$matches[1].'"');
         }
         
         $response = new \NI\Api\Response();
