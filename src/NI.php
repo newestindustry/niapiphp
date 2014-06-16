@@ -199,5 +199,45 @@ class NI
         self::$api = $api;
     }
 
+	/**
+     * getPostFromInput function.
+     *
+     * @access public
+     * @static
+     * @return array
+     */
+	public static function getPostFromInput() {
+	    $ct = $_SERVER['CONTENT_TYPE'];
+	    $position = stripos($ct, "boundary=");
+	
+	    $input = file_get_contents("php://input");
+	    $postVars = array();
+	    if($position !== false) {
+	
+	        $exp = explode("boundary=", $ct);
+	        if(isset($exp[1])) {
+	            $boundary = trim($exp[1]);
+	            
+	            $variables = explode("--".$boundary, $input);
+	            
+	            foreach($variables as $var) {
+	                $var = urldecode($var);
+	                if(trim($var) != "" && trim($var) != "--") {
+	                    preg_match('/Content-Disposition:[ _]*form-data;[ _]*name="([^\"]*)"(.*)/si', $var, $result);
+	                    $postVars[trim($result[1])] = trim($result[2]);
+	                }
+	            }
+	        }
+	    } else {
+	        parse_str($input, $postVars);
+	    }
+	
+	    if(count($_POST) > 0 && count($postVars) === 0) {
+	        $postVars = $_POST;
+	    }
+	    
+	    return $postVars;
+	}
+	
 
 }

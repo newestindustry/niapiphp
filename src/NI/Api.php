@@ -344,6 +344,10 @@ class Api
      */
     public function put($uri, $data)
     {
+    	if(is_array($data)) {
+	    	$data = http_build_query($data);
+    	}
+    
         return $this->call($uri, "PUT", $data);
     }
     
