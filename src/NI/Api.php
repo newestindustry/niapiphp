@@ -423,9 +423,11 @@ class Api
         $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         $this->status = $http_status;
-        if($e === false) {
+        /*
+if($e === false) {
             throw new \NI\Api\Exception();
         }
+*/
         
         if(!curl_errno($ch))
         {
