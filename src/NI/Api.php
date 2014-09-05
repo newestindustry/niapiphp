@@ -24,12 +24,12 @@ class Api
     /**
      * base_url
      * 
-     * (default value: "https://api.mycollectiv.es")
+     * (default value: "https://api.newestindustry.nl")
      * 
      * @var string
      * @access public
      */
-    public $base_url = "https://api.mycollectiv.es";
+    public $base_url = "https://api.newestindustry.nl";
     
     /**
      * auth_url
@@ -39,7 +39,7 @@ class Api
      * @var string
      * @access public
      */
-    public $auth_url = "https://api.mycollectiv.es";
+    public $auth_url = "https://api.newestindustry.nl";
     
     
     /**
