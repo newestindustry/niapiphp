@@ -207,10 +207,16 @@ class NI
      * @return array
      */
 	public static function getPostFromInput() {
+
 	    $ct = $_SERVER['CONTENT_TYPE'];
 	    $position = stripos($ct, "boundary=");
 	
-	    $input = file_get_contents("php://input");
+        if(!isset($GLOBALS['ni_php_input'])) {
+            $GLOBALS['ni_php_input'] = file_get_contents("php://input");    
+        }
+
+        $input = $GLOBALS['ni_php_input'];
+	    
 	    $postVars = array();
 	    if($position !== false) {
 	
