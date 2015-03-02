@@ -371,10 +371,25 @@ class Api {
 			$headers[] = 'Authorization: ' . $this->header_name . " " . \NI::$token;
 		}
 
-		if ($this->header_name === "Bearer") {
-			$headers[] = 'Content-Type: application/x-www-form-urlencoded';
+        $skipContentType = false;
+		if ($this->header_name === "Bearer" ) {
+    		
+    		if(is_array($data) && isset($data['file'])) {
+        		$classType = gettype($data['file']);
+        		if($classType === "object") {
+            		$className = get_class($data['file']);
+            		if($className === "CURLFile") {
+                		$skipContentType = true;
+            		}
+        		}
+            }
+        		
+            if(!$skipContentType) {
+                $headers[] = 'Content-Type: application/x-www-form-urlencoded';
+            }
 		}
-
+		
+		
 		if ($this->api_key) {
 			$headers[] = 'X-API-Key: ' . $this->api_key;
 		}
@@ -393,8 +408,11 @@ class Api {
 				break;
 
 			case "POST":
-				curl_setopt($ch, CURLOPT_POST, true);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+				if($skipContentType) {
+    			    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);        					
+				} else {
+    				curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));        				
+				}
 				break;
 
 			case "PUT":
