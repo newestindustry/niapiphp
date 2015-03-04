@@ -390,6 +390,12 @@ class Api {
 		}
 		
 		
+        // Don't build query on json
+        $jsonType = "application/json";
+        if(substr($_SERVER['CONTENT_TYPE'], 0, strlen($jsonType)) === $jsonType) {
+            $skipContentType = true;
+        }
+		
 		if ($this->api_key) {
 			$headers[] = 'X-API-Key: ' . $this->api_key;
 		}
