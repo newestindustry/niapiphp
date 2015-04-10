@@ -421,6 +421,9 @@ class Api {
 
 			case "POST":
 				if ($skipContentType) {
+					if(is_array($data) && $jsonCall === true) {
+        					$data = json_encode($data);
+    					}
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 				} else {
 					curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
