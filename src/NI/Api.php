@@ -150,9 +150,15 @@ class Api {
 	 */
 	public function getProfile() {
 		if (!$this->me) {
-			$me = $this->get("/me/");
+			$me = $this->get("/me", array(), true);
 			if (\NI::$token && $me->isSuccess()) {
-				$this->me = $me->data->me;
+                $ame = new \stdClass();
+                $ame->emailaddress = $me->data->EmailAddress;
+                $ame->id = $me->data->ID;
+                $ame->firstname = $me->data->Firstname;
+                $ame->lastname = $me->data->Lastname;
+                $this->me = $ame;
+
 				return $this->me;
 			} else {
 				return false;
@@ -306,8 +312,8 @@ class Api {
 	 * @param string $uri
 	 * @return \NI\Api\Response
 	 */
-	public function get($uri) {
-		return $this->call($uri, "GET");
+	public function get($uri, $data = array(), $auth = false) {
+		return $this->call($uri, "GET", $data, $auth);
 	}
 
 	/**
@@ -421,9 +427,6 @@ class Api {
 
 			case "POST":
 				if ($skipContentType) {
-					if(is_array($data) && $jsonCall === true) {
-        					$data = json_encode($data);
-    					}
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 				} else {
 					curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
