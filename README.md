@@ -10,6 +10,7 @@ You can load the class via composer by using
 
 in the require part.
 
+
 After that you can initiate the NI class by giving the client id, client secret and redirect uri to the default object:
 
 
