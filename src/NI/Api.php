@@ -411,6 +411,8 @@ class Api {
 		if ($this->api_key) {
 			$headers[] = 'X-API-Key: ' . $this->api_key;
 		}
+		
+		$headers[] = "X-ORIGIN-HOSTNAME: ".$_SERVER['HTTP_HOST'];
 
 		$ch = curl_init($url);
 
