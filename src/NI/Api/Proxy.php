@@ -157,7 +157,7 @@ class Proxy
         // Order of setting is important! Please DON'T change this!
         $request->setURL(new Url($resource));
         $request->setRoute(Routes::detect($request->getUrl()->path));
-        $params = new Parameters($request->getUrl(), $request->getRoute());
+        $params = new Parameters($request->getUrl(), $request->getRoute(), true);
 
         // We have to array_merge here because the original getFilterParams (private internal function) uses $_GET
         // directly
