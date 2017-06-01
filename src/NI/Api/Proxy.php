@@ -33,18 +33,34 @@ class Proxy
     private $apiKey;
 
     /**
+     * $profileUrl is the url of the nicci profile backend.
+     * @var string $profileUrl
+     */
+    private $profileUrl;
+
+    /**
+     * $staticDir is needed for defining the API Static Folder (needed for file handling). Strategy here is now
+     * to define STATIC_PATH=$staticDir and define STATIC_FILE_PATH=$staticDir/files (as both are needed in the API.
+     * @var string $staticDir
+     */
+    private $staticDir;
+
+    /**
      * Proxy constructor.
      *
      * @param string $apiDir
      * @param string $token
      * @param string $apiKey
+     * @param string $profileUrl
      * @return Proxy
      */
-    public function __construct($apiDir, $token, $apiKey)
+    public function __construct($apiDir, $token, $apiKey, $profileUrl, $staticDir)
     {
         $this->apiDir = $apiDir;
         $this->token = $token;
         $this->apiKey = $apiKey;
+        $this->profileUrl = $profileUrl;
+        $this->staticDir = $staticDir;
     }
 
     /**
@@ -112,10 +128,10 @@ class Proxy
      */
     public function call($resource, $method, $data)
     {
-        if($method != "GET") {
+        if ($method != "GET") {
             // Fun stuff. The CMS works with http built queries as well... Ok, to be sure it's not a json "string"
             // we need to try to parse it first to json and if it fails we try the parse_str.
-            if(gettype($data) === "string") {
+            if (gettype($data) === "string") {
                 $postVars = json_decode($data, true);
                 if (!$postVars) {
                     parse_str($data, $postVars);
@@ -125,6 +141,11 @@ class Proxy
         }
 
         $proxy = true;
+        // This is needed for the API to properly select the NICCI Profile URL
+        putenv("PROFILE_URL=" . $this->profileUrl);
+        putenv("STATIC_PATH=" . $this->staticDir);
+        putenv("STATIC_FILE_PATH=" . $this->staticDir . "/files");
+
         $configFile = $this->apiDir . "/public/config.inc.php";
         if (!file_exists($configFile)) {
             throw new \NI\Api\Proxy\Exception("API Config file not found", 501);
@@ -137,6 +158,10 @@ class Proxy
         $request->setURL(new Url($resource));
         $request->setRoute(Routes::detect($request->getUrl()->path));
         $params = new Parameters($request->getUrl(), $request->getRoute());
+
+        // We have to array_merge here because the original getFilterParams (private internal function) uses $_GET
+        // directly
+        $params->setFilterParameters(array_merge($request->getUrl()->queryParts, $params->getFilterParameters()));
         $params->setDataParams($data);
         // Todo: As the data can also be string should we do this? I think we should as we parse it above. @mvmaasakkers
         $params->setRawData(json_encode($data));
