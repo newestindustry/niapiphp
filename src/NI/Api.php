@@ -127,6 +127,11 @@ class Api {
 	 */
 	public $format = false;
 
+    /**
+     * @var string
+     */
+	public $api_dir;
+
 	/**
 	 * __construct function.
 	 *
@@ -188,7 +193,7 @@ class Api {
 	 * @return void
 	 */
 	public function readConfig($config = array()) {
-		$vars = array("api_key", "base_url", "auth_url", "prefix", "client_id", "client_secret", "redirect_uri", "scope", "locale", "header_name");
+		$vars = array("api_key", "base_url", "auth_url", "prefix", "client_id", "client_secret", "redirect_uri", "scope", "locale", "header_name", "api_dir");
 
 		foreach ($vars as $var) {
 			if (isset($config[$var])) {
@@ -366,6 +371,12 @@ class Api {
 	 * @return \NI\Api\Response
 	 */
 	private function call($resource, $method, $data = array(), $auth = false) {
+	    if (!$auth) {
+            $proxy = new \NI\Api\Proxy($this->api_dir, \NI::$token, $this->api_key);
+            $response = $proxy->call($resource, $method, $data);
+
+            return $response;
+        }
 		$headers = array('Expect:');
 		if ($auth) {
 			$url = $this->auth_url . $this->prefix . $resource;
