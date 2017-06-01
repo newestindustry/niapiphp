@@ -124,6 +124,7 @@ class Proxy
             }
         }
 
+        $proxy = true;
         $configFile = $this->apiDir . "/public/config.inc.php";
         if (!file_exists($configFile)) {
             throw new \NI\Api\Proxy\Exception("API Config file not found", 501);
